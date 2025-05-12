@@ -1,18 +1,25 @@
-import { test, expect } from '@playwright/test';
+import {test} from "@playwright/test";
+import MainPage from "../src/PO/MainPage";
+import AuthController from "../src/apiControllers/authController";
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
-});
+test.describe('Providers test', () => {
+    let mainPage: MainPage
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+    test('Check providers', async ({page}) => {
+        mainPage = new MainPage(page)
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+        await mainPage.navTo('/')
+        await mainPage.openLoginModal()
+        await mainPage.login({
+            email: 'samoilenkofluttershy@gmail.com',
+            password: '193786Az()'
+        })
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
+        const text = await mainPage.getProvidersText()
+
+        console.log(text)
+
+
+    })
+})
