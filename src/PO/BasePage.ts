@@ -7,7 +7,11 @@ export default class BasePage {
         this.page = page
     }
 
-    async navTo(url: string){
+    async navTo(url: string) {
         await this.page.goto(url)
+    }
+
+    async goBack() {
+        await this.page.goBack()
     }
 }

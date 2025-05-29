@@ -4,7 +4,7 @@ interface ExpectedResults {
 
 
 
-const EXPECTED_RESULTS: ExpectedResults = {
+export const EXPECTED_RESULTS: ExpectedResults = {
     IE: ['Providers', '1spin4win', '3 Oaks', '4theplayer', '7mojos', 'Acerun', 'Absolute Live Gaming', 'Amatic', 'Amusnet', 'Amusnetlive', 'Apparat Gaming', 'AvatarUX', 'Backseatgaming', 'Bangbanggames', 'Belatra',
         'ICONIC21', 'BetGames', 'BGaming', 'BigTimeGaming', 'Bitpunch', 'Blueprint', 'Boomerangstudios', 'Booming Games', 'Betsoft Gaming', 'Bulletproof', 'Bullsharkgames', 'Clawbuster', 'Eagaming', 'Elcasino', 'Endorphina',
         'Evolution', 'Evoplay Entertainment', 'Eyecon', 'Ezugi', 'Fazi', 'Felix Gaming', 'Fugaso', 'GameArt', 'Gamebeat', 'Gamevy', 'Gamzix', 'Goldenhero', 'Habanero', 'Hacksawg', 'High 5', 'Hotrisegames', 'Hungrybear',
