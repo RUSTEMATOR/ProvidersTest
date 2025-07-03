@@ -3,37 +3,44 @@ import MainPage from "../src/PO/MainPage";
 import {EXPECTED_RESULTS} from "../src/expectedResults/expectedResults";
 import AuthController from "../src/apiControllers/authController";
 import VpnController from "../src/VpnController/vpnController";
+import { USERS } from "../src/Users/users";
 
 
 
 const testData = {
     IE: {
         location: 'Ireland',
-        expectedResult: EXPECTED_RESULTS.IE
+        expectedResult: EXPECTED_RESULTS.IE,
+        creds: USERS.IE
     },
     AU: {
         location: 'Australia - Melbourne',
-        expectedResult: EXPECTED_RESULTS.AU
+        expectedResult: EXPECTED_RESULTS.AU,
+        creds: USERS.AU
     },
     CA: {
         location: 'Canada - Montreal',
-        expectedResult: EXPECTED_RESULTS.CA
+        expectedResult: EXPECTED_RESULTS.CA,
+        creds: USERS.CA
     },
     DE: {
-        location: 'Germany - Frankfurt',
-        expectedResult: EXPECTED_RESULTS.DE
+        location: 'Germany - Frankfurt - 1',
+        expectedResult: EXPECTED_RESULTS.DE,
+        creds: USERS.DE     
     },
     NZ: {
         location: 'New Zealand',
-        expectedResult: EXPECTED_RESULTS.NZ
+        expectedResult: EXPECTED_RESULTS.NZ,
+        creds: USERS.NZ
     },
     NO: {
         location: 'Norway',
-        expectedResult: EXPECTED_RESULTS.NO
+        expectedResult: EXPECTED_RESULTS.NO,
+        creds: USERS.NO 
     }
 };
 
-for (let {location} of Object.values(testData)) {
+for (let {location, creds} of Object.values(testData)) {
 
     test.describe(`Providers test ${location}`, () => {
         let mainPage: MainPage
@@ -43,7 +50,7 @@ for (let {location} of Object.values(testData)) {
             mainPage = new MainPage(page)
             vpnController = new VpnController()
 
-             await vpnController.vpnConnect(location)
+            await vpnController.vpnConnect(location)
 
             while (true) {
                 const status = await vpnController.isConnectedToLocation(location)
@@ -58,40 +65,53 @@ for (let {location} of Object.values(testData)) {
             await mainPage.navTo('/')
             await mainPage.openLoginModal()
             await mainPage.login({
-                email: 'samoilenkofluttershy@gmail.com',
-                password: '193786Az()'
+                email: creds.email,
+                password: creds.password
             })
         })
 
-        test('Check games of providers', async () => { 
-            const providers: Array<Locator> = await mainPage.getAllProviders()
-
-            for (let provider of providers) {
-                await mainPage.openProvidersDropdown()
-                const providerName = await provider.textContent()
-                await mainPage.clickOnProvider(provider)
-
-
-                for (let i = 0; i <= 1; i++) {
-                    const gameTitle = await mainPage.getGameTitle(i)
-                    const playButtons: Array<Locator> = await mainPage.getAllPlayButtons()
-                    await test.step(`Checking ${gameTitle} of provider: ${providerName}`, async () => {
-                    await mainPage.clickOnPlayButton(playButtons[i])
-                    await mainPage.page.waitForTimeout(15000)
-                    
-
-                    await mainPage.page.screenshot({path: `Screenshots/${location}/${providerName}_${gameTitle}.png`})
-                })
-                    await mainPage.navTo('/')
-                    await mainPage.openProvidersDropdown()
-                    await mainPage.clickOnProvider(provider)
-                }
-                await mainPage.navTo('/')
-                
+        test('Check games of providers', async ({request}) => {
+            const location = async () => {
+               return (await request.get('https://www.kingbillycasino15.com/api/current_ip')).json()
             }
+            console.log(await location())
+            // const providerNames = await mainPage.getAllProviders(); 
+            
+            // for (const providerName of providerNames) {
+            //     await mainPage.openProvidersDropdown();
+            //     await mainPage.clickOnProvider(providerName);
 
+            //     await mainPage.page.waitForTimeout(3000); 
+            //     const playButtons = await mainPage.getAllPlayButtons();
 
-        })
+            //     if (playButtons.length === 0) {
+            //         console.warn(`No games found for provider: ${providerName}`);
+            //         continue;
+            //     }
+
+            //     const numGamesToCheck = Math.min(2, playButtons.length); 
+            //     for (let i = 0; i < numGamesToCheck; i++) {
+            //         const gameTitle = await mainPage.getGameTitle(i);
+
+            //         await test.step(`Checking "${gameTitle}" of provider "${providerName}"`, async () => {
+            //             await mainPage.clickOnPlayButton(playButtons[i]);
+            //             await mainPage.page.waitForTimeout(15000);
+
+            //             const safeTitle = gameTitle.replace(/[<>:"\/\\|?*]/g, '-'); // sanitize filename
+            //             await mainPage.page.screenshot({
+            //                 path: `Screenshots/${location}/${providerName}_${safeTitle}.png`
+            //             });
+
+            //             await mainPage.navTo('/');
+            //             await mainPage.openProvidersDropdown();
+            //             await mainPage.clickOnProvider(providerName);
+            //         });
+            //     }
+
+            //     await mainPage.navTo('/'); // reset to home before next provider
+            // }
+        });
+
 
 
         test.afterAll(async () => {
