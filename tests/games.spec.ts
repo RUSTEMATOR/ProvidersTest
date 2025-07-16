@@ -1,7 +1,6 @@
 import {Locator, test} from "@playwright/test";
 import MainPage from "../src/PO/MainPage";
 import {EXPECTED_RESULTS} from "../src/expectedResults/expectedResults";
-import AuthController from "../src/apiControllers/authController";
 import VpnController from "../src/VpnController/vpnController";
 
 
@@ -20,7 +19,7 @@ const testData = {
         expectedResult: EXPECTED_RESULTS.CA
     },
     DE: {
-        location: 'Germany - Frankfurt',
+        location: 'Germany - Frankfurt - 1',
         expectedResult: EXPECTED_RESULTS.DE
     },
     NZ: {
