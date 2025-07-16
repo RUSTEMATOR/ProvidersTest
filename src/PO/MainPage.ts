@@ -43,7 +43,7 @@ export default class MainPage extends BasePage {
         const providers = this.allProviders.all()
         const allGameCount = await this.gameCount.all()
         const providerNames: string[] = [];
-        Promise.all(
+        await Promise.all(
             allGameCount.map(async (counter) => {
                 await counter.evaluate((node) => {
                     node.remove()
@@ -75,6 +75,7 @@ export default class MainPage extends BasePage {
 
     async getAllGameCards(): Promise<Array<Locator>> {
         await this.catalogueList.waitFor({state: "visible"})
+        this.page.waitForTimeout(4000)
         return this.gameCard.all()
     }
     
